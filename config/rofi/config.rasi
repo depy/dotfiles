@@ -1,0 +1,10 @@
+configuration {
+  font: "mono 12";
+  show-icons: true;
+}
+
+listview {
+  scrollbar: false;
+}
+
+@theme "catppuccin-default"
