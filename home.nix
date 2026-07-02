@@ -14,6 +14,14 @@ in
   # Let Home Manager manage itself.
   programs.home-manager.enable = true;
 
+  programs.btop = {
+    enable = true;
+    settings = {
+      color_theme = "TTY";
+      theme_background = false;
+    };
+  };
+
   # Add user packages here
   home.packages = with pkgs; [
     neovim
@@ -22,7 +30,6 @@ in
     rofi
     vlc
     fastfetch
-    btop
     tmux
     xournalpp
     qbittorrent
