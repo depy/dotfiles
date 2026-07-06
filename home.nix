@@ -36,6 +36,7 @@ in
     chromium
     gh
     tio
+    kicad
   ];
 
   xdg.configFile = {
