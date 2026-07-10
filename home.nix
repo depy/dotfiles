@@ -38,6 +38,8 @@ in
     tio
     kicad
     prismlauncher
+    zed-editor
+    nerd-fonts.jetbrains-mono
   ];
 
   xdg.configFile = {
