@@ -37,6 +37,7 @@ in
     gh
     tio
     kicad
+    prismlauncher
   ];
 
   xdg.configFile = {
