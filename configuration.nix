@@ -99,7 +99,7 @@
   users.users."matjaz" = {
     isNormalUser = true;
     description = "matjaz";
-    extraGroups = [ "networkmanager" "wheel" "hidraw" "dialout"];
+    extraGroups = [ "networkmanager" "wheel" "hidraw" "dialout" "podman"];
   };
 
   # Install firefox.
@@ -120,7 +120,17 @@
     wget
     curl
     git
+    podman
   ];
+
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+        enable = true;
+        dockerCompat = true;
+        defaultNetwork.settings.dns_enabled = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

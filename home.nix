@@ -14,12 +14,25 @@ in
   # Let Home Manager manage itself.
   programs.home-manager.enable = true;
 
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      ff = "fastfetch";
+      aic = "podman run --rm -it -v claude-home:/root -v \"$PWD\":/work:z -w /work docker.io/library/node:22 npx --yes @anthropic-ai/claude-code";
+    };
+  };
+
   programs.btop = {
     enable = true;
     settings = {
       color_theme = "TTY";
       theme_background = false;
     };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableBashIntegration = true;   # default true when enabled
   };
 
   # Add user packages here
