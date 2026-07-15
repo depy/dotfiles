@@ -17,12 +17,20 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 
+-- status line
+vim.opt.statusline = " %<%f %h%m%r%=%-14.(%l,%c%V%) %P "
+
+-- other
 vim.opt.ignorecase = true
 vim.opt.scrolloff = 8
 vim.opt.undofile = true
+vim.opt.inccommand = "split"
+vim.splitright = true
+vim.splitbelow = true
 
--- status line
-vim.opt.statusline = " %<%f %h%m%r%=%-14.(%l,%c%V%) %P "
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function() vim.highlight.on_yank({ timeout = 350 }) end,
+})
 
 ----------------------
 -- helper functions --
@@ -68,6 +76,15 @@ local keymap = vim.keymap.set
 keymap("n", "<space>", "<Nop>")
 keymap("n", "<leader><leader>", "<C-^>")
 keymap("n", "<leader>bd", "<cmd>b#|bd#<cr>")
+keymap("n", "<leader>ss", "<cmd>split<cr>")
+keymap("n", "<leader>sv", "<cmd>vsplit<cr>")
+keymap("n", "<leader>sc", "<cmd>close<cr>")
+keymap("n", "<C-h>", "<C-w>h")
+keymap("n", "<C-j>", "<C-w>j")
+keymap("n", "<C-k>", "<C-w>k")
+keymap("n", "<C-l>", "<C-w>l")
+keymap("t", "<Esc><Esc>", "<C-\\><C-n>")
+
 
 keymap("n", "<leader>ff", function()
   pick("fzf", goto_file)
