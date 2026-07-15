@@ -66,6 +66,8 @@ in
     prismlauncher
     nerd-fonts.jetbrains-mono
     obsidian
+    fzf
+    ripgrep
 
     # Shell apps
     aic
