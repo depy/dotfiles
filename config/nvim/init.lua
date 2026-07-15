@@ -31,7 +31,7 @@ vim.opt.statusline = " %<%f %h%m%r%=%-14.(%l,%c%V%) %P "
 -- open a file and (optionally) put the cursor on a line
 local function goto_file(file, line)
   if not file then return end
-  vim.cmd.edit(file)
+  vim.cmd.edit(vim.fn.fnameescape(file))
   if line then
     vim.api.nvim_win_set_cursor(0, { tonumber(line), 0 })
   end
@@ -41,13 +41,20 @@ end
 local function pick(cmd, sink)
   local tmp = vim.fn.tempname()
   vim.cmd(("botright 15split | term %s > %s"):format(cmd, tmp))
+  local buf = vim.api.nvim_get_current_buf()
   vim.cmd.startinsert()
   vim.api.nvim_create_autocmd("TermClose", {
+    buffer = buf,
     once = true,
     callback = function()
-      local ok, out = pcall(vim.fn.readfile, tmp)
-      vim.cmd.bwipeout({ bang = true })
-      if ok and out[1] and out[1] ~= "" then sink(out[1]) end
+      vim.schedule(function()
+        local ok, out = pcall(vim.fn.readfile, tmp)
+        vim.fn.delete(tmp)
+        if vim.api.nvim_buf_is_valid(buf) then
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
+        if ok and out[1] and out[1] ~= "" then sink(out[1]) end
+      end)
     end,
   })
 end
@@ -60,6 +67,7 @@ vim.g.mapleader = " "
 local keymap = vim.keymap.set
 keymap("n", "<space>", "<Nop>")
 keymap("n", "<leader><leader>", "<C-^>")
+keymap("n", "<leader>bd", "<cmd>b#|bd#<cr>")
 
 keymap("n", "<leader>ff", function()
   pick("fzf", goto_file)
