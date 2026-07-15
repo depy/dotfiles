@@ -3,6 +3,20 @@
 let
   link = path:
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/${path}";
+
+  # Run the AI agent in a container, mounting only the current directory
+  # so it has no access to the rest of the file system.
+  aic = pkgs.writeShellApplication {
+    name = "aic";
+    text = ''
+      podman run --rm -it \
+        -v claude-home:/root \
+        -v "$PWD":/work:z \
+        -w /work \
+        docker.io/library/node:22 \
+        npx --yes @anthropic-ai/claude-code "$@"
+    '';
+  };
 in
 {
   home.username = "matjaz";
@@ -18,7 +32,6 @@ in
     enable = true;
     shellAliases = {
       ff = "fastfetch";
-      aic = "podman run --rm -it -v claude-home:/root -v \"$PWD\":/work:z -w /work docker.io/library/node:22 npx --yes @anthropic-ai/claude-code";
     };
   };
 
@@ -53,6 +66,7 @@ in
     prismlauncher
     zed-editor
     nerd-fonts.jetbrains-mono
+    aic
   ];
 
   xdg.configFile = {
