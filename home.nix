@@ -66,6 +66,9 @@ in
     prismlauncher
     zed-editor
     nerd-fonts.jetbrains-mono
+    obsidian
+
+    # Shell apps
     aic
   ];
 
