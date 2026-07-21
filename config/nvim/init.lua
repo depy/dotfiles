@@ -67,6 +67,33 @@ local function pick(cmd, sink)
   })
 end
 
+-- Send visual selection + prompt to a tmux window
+local function send_to_tmux(target)
+  vim.cmd([[execute "normal! \<Esc>"]])
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  local file_path = vim.fn.expand("%:p")
+
+  local done = false
+  vim.ui.input({ prompt = "Message: " }, function(input)
+    if done or input == nil then return end
+    done = true
+
+    local payload = string.format(
+      "%s\n\nFile: %s\nLines: %d:%d\n\n```\n%s\n```\n",
+      input, file_path, start_line, end_line, table.concat(lines, "\n")
+    )
+
+    local load = vim.system({ "tmux", "load-buffer", "-" }, { stdin = payload }):wait()
+    if load.code ~= 0 then
+      vim.notify("tmux load-buffer failed", vim.log.levels.ERROR)
+      return
+    end
+    vim.system({ "tmux", "paste-buffer", "-d", "-t", target }):wait()
+  end)
+end
+
 -------------
 -- keymaps --
 -------------
@@ -123,3 +150,7 @@ keymap("n", "<leader>bb", function()
     vim.cmd.buffer(sel:match("^(%d+)"))
   end)
 end)
+
+vim.keymap.set("x", "<leader>fi", function()
+  send_to_tmux("ai")  -- window named "ai"
+end, { desc = "Send selection to tmux" })

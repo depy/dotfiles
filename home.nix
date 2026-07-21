@@ -68,6 +68,7 @@ in
     obsidian
     fzf
     ripgrep
+    bat
 
     # Shell apps
     aic
