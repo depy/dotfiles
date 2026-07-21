@@ -154,3 +154,9 @@ end)
 vim.keymap.set("x", "<leader>fi", function()
   send_to_tmux("ai")  -- window named "ai"
 end, { desc = "Send selection to tmux" })
+
+vim.keymap.set("n", "<leader>cp", function()
+  local path = vim.fn.expand("%:.")
+  vim.fn.setreg("+", path)
+  vim.notify("Copied: " .. path)
+end, { desc = "Copy relative file path" })
