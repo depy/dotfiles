@@ -8,9 +8,9 @@ $username\
 $directory\
 [](bg:yellow fg:peach)\
 $git_branch\
-[](fg:yellow bg:green)\
+[](fg:yellow bg:yellow)\
 $git_status\
-[](fg:green bg:sapphire)\
+[](fg:yellow bg:sapphire)\
 $nix_shell\
 [ ](fg:sapphire)\
 $cmd_duration\
