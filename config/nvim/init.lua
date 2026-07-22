@@ -22,6 +22,10 @@ vim.opt.softtabstop = 4
 -- status line
 vim.opt.statusline = " %<%f %h%m%r%=%-14.(%l,%c%V%) %P "
 
+-- copy/paste
+vim.g.clipboard = 'osc52'
+vim.opt.clipboard = "unnamedplus"
+
 -- other
 vim.opt.ignorecase = true
 vim.opt.scrolloff = 8
