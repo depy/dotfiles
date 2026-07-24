@@ -7,9 +7,10 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    catppuccin.url = "github:catppuccin/nix";
   };
 
-  outputs = { self, nixpkgs, home-manager }: {
+  outputs = { self, nixpkgs, home-manager, catppuccin }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -18,6 +19,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
+            sharedModules = [ catppuccin.homeModules.catppuccin ];
             users.matjaz = ./home.nix;
           };
         }

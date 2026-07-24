@@ -48,6 +48,17 @@ in
     enableBashIntegration = true;   # default true when enabled
   };
 
+  programs.bat = {
+    enable = true;
+  };
+
+  catppuccin = {
+    enable = true;      # not the global auto-enroll
+    autoEnable = false;  # matches enable, suppresses the warning
+    flavor = "mocha";
+    bat.enable = true;   # per-app opt-in still works
+  };
+
   # Add user packages here
   home.packages = with pkgs; [
     neovim
