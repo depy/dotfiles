@@ -17,6 +17,38 @@ let
         npx --yes @anthropic-ai/claude-code "$@"
     '';
   };
+
+  piDockerfile = pkgs.writeText "Dockerfile.pi" ''
+    FROM node:24-bookworm-slim
+    RUN apt-get update \
+      && apt-get install -y --no-install-recommends bash ca-certificates git ripgrep \
+      && rm -rf /var/lib/apt/lists/*
+    RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+    WORKDIR /workspace
+    ENTRYPOINT ["pi"]
+  '';
+
+  aipi = pkgs.writeShellApplication {
+    name = "aipi";
+    runtimeInputs = [ pkgs.podman ];
+    text = ''
+      tag="pi-sandbox:$(basename ${piDockerfile} | cut -d- -f1)"
+      if ! podman image exists "$tag"; then
+        podman build -t "$tag" -f ${piDockerfile} "$(mktemp -d)"
+      fi
+      entrypoint=()
+      if [[ "''${1:-}" == "--shell" ]]; then
+        entrypoint=(--entrypoint /bin/bash)
+        shift
+      fi
+      podman run --rm -it \
+        -v pi-agent-home:/root/.pi/agent \
+        -v "$PWD":/workspace:z \
+        -w /workspace \
+        "''${entrypoint[@]}" \
+        "$tag" "$@"
+    '';
+  };
 in
 {
   home.username = "matjaz";
@@ -80,9 +112,11 @@ in
     fzf
     ripgrep
     bat
+    logisim-evolution
 
     # Shell apps
     aic
+    aipi
   ];
 
   xdg.configFile = {
