@@ -112,6 +112,7 @@ in
     fzf
     ripgrep
     bat
+    unzip
     logisim-evolution
 
     # Shell apps

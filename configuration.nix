@@ -93,6 +93,8 @@
     ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="0660", TAG+="uaccess" GROUP="dialout"
   '';
 
+  services.udev.packages = [ pkgs.stlink ];
+
   users.groups.hidraw = {};
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
