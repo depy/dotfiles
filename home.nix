@@ -21,7 +21,7 @@ let
   piDockerfile = pkgs.writeText "Dockerfile.pi" ''
     FROM node:24-bookworm-slim
     RUN apt-get update \
-      && apt-get install -y --no-install-recommends bash ca-certificates git ripgrep vim python3 \
+      && apt-get install -y --no-install-recommends bash ca-certificates git ripgrep vim python3 poppler-utils \
       && rm -rf /var/lib/apt/lists/*
     RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
     WORKDIR /workspace
@@ -114,6 +114,9 @@ in
     bat
     unzip
     logisim-evolution
+    gcc
+    arduino-ide
+    python3
 
     # Shell apps
     aic
