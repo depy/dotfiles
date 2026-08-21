@@ -101,7 +101,7 @@
   users.users."matjaz" = {
     isNormalUser = true;
     description = "matjaz";
-    extraGroups = [ "networkmanager" "wheel" "hidraw" "dialout" "podman"];
+    extraGroups = [ "networkmanager" "wheel" "hidraw" "dialout" "podman" "libvirtd"];
   };
 
   # Install firefox.
@@ -123,6 +123,7 @@
     curl
     git
     podman
+    virtiofsd
   ];
 
   virtualisation = {
@@ -132,7 +133,21 @@
         dockerCompat = true;
         defaultNetwork.settings.dns_enabled = true;
     };
+
+    libvirtd = {
+        enable = true;
+        qemu = {
+            package = pkgs.qemu_kvm;
+            vhostUserPackages = with pkgs; [ virtiofsd ];
+        };
+    };
+    spiceUSBRedirection.enable = true;  # USB passthrough into guests
   };
+
+  programs.virt-manager.enable = true;
+  environment.etc."libvirt/qemu.conf".text = ''
+    virtiofsd = [ "${pkgs.virtiofsd}/bin/virtiofsd" ]
+  '';
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
