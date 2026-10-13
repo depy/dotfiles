@@ -25,6 +25,11 @@
   networking.networkmanager.enable = true;
 
   # Hardware
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -167,6 +172,7 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.firewall.allowedTCPPorts = [ 8888 ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
